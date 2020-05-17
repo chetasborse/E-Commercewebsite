@@ -14,11 +14,15 @@
 	<title>{% block title %}MyAwesomeCart, Home{% endblock %}</title>
 	<style>{% block css %}{% endblock %}</style>
 </head>
-
+<style>
+	body {
+	background-color : Azure;
+	}
+</style>
 <body>
 	{% load static %}
 	<nav class="navbar navbar-expand-lg navbar-blue bg-dark">
-		<a class="navbar-brand" href="#">My Awesome Cart</a>
+		<a class="navbar-brand" href="{% url 'shopHome' %}">My Awesome Cart</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 		aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -26,35 +30,61 @@
 	
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-			</li>
+<!--			<li class="nav-item active">-->
+<!--				<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
+<!--			</li>-->
 
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Dropdown
+				My Products
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="#">Grocery</a>
-				<a class="dropdown-item" href="#">Vegetables</a>
+				<a class="dropdown-item" href="{% url 'Grocery' %}">Grocery</a>
+				<a class="dropdown-item" href="{% url 'Vegetables' %}">Vegetables</a>
 				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="#">Fruits</a>
+				<a class="dropdown-item" href="{% url 'Fruits' %}">Fruits</a>
 			</div>
 		</li>
 		
 	
-	<form class="form-inline my-2 my-lg-0">
-		<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+	<form  action = "/search_results" class="form-inline my-2 my-lg-0"  method = "GET"> 
+		<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name = "Search">
 		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 	</form>
 	</ul>
-	<div class="nav-item " style = "margin-right:300px;">
-		<a class="nav-link" href="#">Cart</a>
-	</div>
+<!--	<div class="nav-item " style = "margin-right:300px;">-->
+<!--		<a class="nav-link" href="#">Cart</a>-->
+<!--	</div>-->
+
+		{% if user.is_authenticated %}
+		<div class="nav-item " >
+			<a class="nav-link" href="{% url 'logout' %}">Log out</a>
+		</div>
+		<div class="nav-item ">
+			<a class="nav-link" href="{% url 'profile' %}">Profile</a>
+		</div>
+		<div class="nav-item " style = "margin-right:50px;">
+			<a class="nav-link" href="{% url 'cart' idz=0 typer='none' %}">My Cart</a>
+		</div>
+		{% else %}
+		<div class="nav-item " >
+			<a class="nav-link" href="{% url 'login' %}">Log In</a>
+		</div>
+		<div class="nav-item " style = "margin-right:50px;">
+			<a class="nav-link" href="{% url 'register' %}">Register</a>
+		</div>
+		{% endif %}
 	
 </div>
 </nav>
+
+		{% if messages %}
+			<div style="border: 1px solid black; width:50%; margin-left:25%; margin-left:25%; padding:10px; margin-top:20px; background-color: rgba(21, 151, 0, 1); color: rgb(255, 255, 255);">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}</div>
+		{% endif %}
 
 {% block body %}
 {% endblock %}
